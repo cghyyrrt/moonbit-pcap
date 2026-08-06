@@ -1,0 +1,81 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "cghyyrrt/moonbit-pcap/src/binary"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn byte_to_hex(Byte) -> String
+
+pub fn bytes_to_hex(Bytes, separator? : String) -> String
+
+pub fn crc32(Bytes) -> UInt
+
+pub fn hex_dump(Bytes, max_len? : Int) -> String
+
+pub fn internet_checksum(Bytes, Int, Int) -> UInt
+
+pub fn ip4_to_string(Bytes, offset? : Int) -> String
+
+pub fn ip6_to_string(Bytes, offset? : Int) -> String
+
+pub fn mac_to_string(Bytes, offset? : Int) -> String
+
+pub fn nibble_to_hex_char(Byte) -> Char
+
+pub fn verify_internet_checksum(Bytes, Int, Int) -> Bool
+
+// Errors
+
+// Types and methods
+pub struct BinaryReader {
+  bytes : Bytes
+  mut offset : Int
+  mut endian : Endian
+}
+pub fn BinaryReader::get_endian(Self) -> Endian
+pub fn BinaryReader::has_bytes(Self, Int) -> Bool
+pub fn BinaryReader::new(Bytes, offset? : Int, endian? : Endian) -> Self
+pub fn BinaryReader::peek_u16(Self) -> UInt
+pub fn BinaryReader::peek_u32(Self) -> UInt
+pub fn BinaryReader::peek_u8(Self) -> Byte
+pub fn BinaryReader::read_bytes(Self, Int) -> Bytes
+pub fn BinaryReader::read_i16(Self) -> Int
+pub fn BinaryReader::read_i32(Self) -> Int
+pub fn BinaryReader::read_u16(Self) -> UInt
+pub fn BinaryReader::read_u24(Self) -> UInt
+pub fn BinaryReader::read_u32(Self) -> UInt
+pub fn BinaryReader::read_u64(Self) -> UInt64
+pub fn BinaryReader::read_u8(Self) -> Byte
+pub fn BinaryReader::remaining(Self) -> Int
+pub fn BinaryReader::seek(Self, Int) -> Unit
+pub fn BinaryReader::set_endian(Self, Endian) -> Unit
+pub fn BinaryReader::skip(Self, Int) -> Unit
+pub fn BinaryReader::tell(Self) -> Int
+
+pub struct BinaryWriter {
+  buf : Array[Byte]
+  mut endian : Endian
+}
+pub fn BinaryWriter::get_endian(Self) -> Endian
+pub fn BinaryWriter::length(Self) -> Int
+pub fn BinaryWriter::new(endian? : Endian) -> Self
+pub fn BinaryWriter::set_endian(Self, Endian) -> Unit
+pub fn BinaryWriter::to_bytes(Self) -> Bytes
+pub fn BinaryWriter::write_bytes(Self, Bytes) -> Unit
+pub fn BinaryWriter::write_u16(Self, UInt) -> Unit
+pub fn BinaryWriter::write_u24(Self, UInt) -> Unit
+pub fn BinaryWriter::write_u32(Self, UInt) -> Unit
+pub fn BinaryWriter::write_u64(Self, UInt64) -> Unit
+pub fn BinaryWriter::write_u8(Self, Byte) -> Unit
+
+pub(all) enum Endian {
+  LittleEndian
+  BigEndian
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+
