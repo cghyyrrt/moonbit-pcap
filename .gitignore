@@ -1,0 +1,6 @@
+target/
+_build/
+*.exe
+*.wasm
+.moon/
+.DS_Store
