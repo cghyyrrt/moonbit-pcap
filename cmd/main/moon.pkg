@@ -1,0 +1,6 @@
+import {
+  "cghyyrrt/moonbit-pcap/src/pcap",
+  "cghyyrrt/moonbit-pcap/src/cli",
+}
+
+pkgtype(kind: "executable")
