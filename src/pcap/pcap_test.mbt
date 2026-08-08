@@ -28,3 +28,33 @@ test "pcap writer and reader roundtrip" {
   inspect(pkts[1].header.ts_sec, content="1600000001")
   inspect(pkts[1].payload.length(), content="5")
 }
+
+///|
+test "linktype parser and text" {
+  let lt = parse_linktype(1U)
+  inspect(lt.to_string(), content="Ethernet (10/100/1000 Mbps)")
+
+  let lt_can = parse_linktype(227U)
+  inspect(lt_can.to_string(), content="SocketCAN")
+}
+
+///|
+test "packet filter length match" {
+  let filter = PacketFilter::new()
+  filter.set_min_length(10)
+  filter.set_max_length(100)
+
+  let pkt_header : PcapPacketHeader = {
+    ts_sec: 1U,
+    ts_usec: 0U,
+    incl_len: 20U,
+    orig_len: 20U,
+  }
+  let pkt : PcapPacket = {
+    header: pkt_header,
+    payload: Bytes::from_array(Array::make(20, b'\x00')),
+    timestamp: 1.0,
+  }
+
+  assert_true(filter.matches(pkt))
+}

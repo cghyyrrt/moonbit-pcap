@@ -1,4 +1,4 @@
-// Unit tests for L4-L7 protocol dissectors (ICMP, UDP, TCP, DNS, CAN, Modbus, MQTT)
+// Unit tests for L4-L7 protocol dissectors (ICMP, UDP, TCP, DNS, CAN, Modbus, MQTT, CoAP, ICMPv6, EDNS0)
 
 ///|
 test "tcp & options parsing" {
@@ -64,4 +64,47 @@ test "industrial modbus tcp parsing" {
   let mb = mb_opt.unwrap()
   inspect(mb.transaction_id, content="1")
   inspect(mb.function_code, content="b'\\x03'")
+}
+
+///|
+test "icmpv6 parsing" {
+  let icmp6_pkt = Bytes::from_array([
+    b'\x80', b'\x00', b'\x12', b'\x34', // Echo Request, Code 0, Checksum
+     b'\x00', b'\x01', b'\x00', b'\x02',
+  ])
+  let res = parse_icmp6(icmp6_pkt)
+  assert_true(res is Some(_))
+  let h = res.unwrap()
+  inspect(h.type_name, content="Echo Request")
+}
+
+///|
+test "coap parsing" {
+  let coap_pkt = Bytes::from_array([
+    b'\x40', b'\x01', b'\x12', b'\x34', // Ver 1, Type CON, TKL 0, Code GET
+     b'\xFF', b'p', b'a', b'y', b'l', b'o', b'a', b'd',
+  ])
+  let res = parse_coap(coap_pkt)
+  assert_true(res is Some(_))
+  let h = res.unwrap()
+  inspect(h.version, content="b'\\x01'")
+  inspect(h.message_id, content="4660")
+}
+
+///|
+test "edns0 opt pseudo-rr parsing" {
+  let rr : DnsResourceRecord = {
+    name: "",
+    rtype: 41U, // OPT
+    rclass: 4096U, // UDP payload size
+    ttl: 0x00008000U, // DO flag set
+    rdlength: 0U,
+    rdata: Bytes::from_array([]),
+    rdata_str: "",
+  }
+  let opt_res = parse_edns0_opt(rr)
+  assert_true(opt_res is Some(_))
+  let opt = opt_res.unwrap()
+  inspect(opt.udp_payload_size, content="4096")
+  assert_true(opt.do_flag)
 }

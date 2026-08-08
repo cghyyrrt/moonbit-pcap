@@ -49,3 +49,39 @@ test "checksum internet RFC 1071" {
   let csum = internet_checksum(pkt, 0, pkt.length())
   assert_true(csum > 0U)
 }
+
+///|
+test "bit reader bitfield operations" {
+  let bytes = Bytes::from_array([b'\xA5', b'\x5A']) // 10100101 01011010
+  let reader = BitReader::new(bytes)
+  inspect(reader.read_bits(4), content="10") // 1010
+  inspect(reader.read_bits(4), content="5") // 0101
+}
+
+///|
+test "crc & adler32 checksums" {
+  let bytes = Bytes::from_array([
+    b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9',
+  ])
+  assert_true(crc16_modbus(bytes) > 0U)
+  assert_true(crc16_ccitt(bytes) > 0U)
+  assert_true(adler32(bytes) > 0U)
+}
+
+///|
+test "base64 encoder" {
+  let bytes = Bytes::from_array([b'M', b'a', b'n'])
+  inspect(base64_encode(bytes), content="TWFu")
+}
+
+///|
+test "varint & zigzag encoding" {
+  let enc = encode_varint_u64(300UL)
+  let r = BinaryReader::new(enc)
+  let dec = decode_varint_u64(r)
+  inspect(dec, content="300")
+
+  let zz = encode_zigzag_i64(-5L)
+  let dec_zz = decode_zigzag_i64(zz)
+  inspect(dec_zz, content="-5")
+}

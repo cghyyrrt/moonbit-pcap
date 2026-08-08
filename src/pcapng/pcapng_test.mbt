@@ -17,3 +17,18 @@ test "pcapng writer and reader roundtrip" {
   inspect(packets[0].cap_len, content="4")
   inspect(packets[1].cap_len, content="5")
 }
+
+///|
+test "name resolver map lookup" {
+  let resolver = NameResolver::new()
+  let rec : NameRecord = {
+    record_type: 1U,
+    ip_address: Bytes::from_array([b'\xC0', b'\xA8', b'\x01', b'\x01']),
+    hostnames: ["router.local"],
+  }
+  resolver.add_record(rec)
+
+  let hostname = resolver.resolve_ip4("192.168.1.1")
+  assert_true(hostname is Some(_))
+  inspect(hostname.unwrap(), content="router.local")
+}

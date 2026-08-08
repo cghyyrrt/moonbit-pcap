@@ -31,3 +31,13 @@ test "terminal summary formatting" {
   let text_summary = export_terminal_summary(stats, anomalies)
   assert_true(text_summary.length() > 0)
 }
+
+///|
+test "html report formatting" {
+  let stats = @analyzer.TrafficStats::new()
+  stats.record_packet(150, "TCP")
+  let anomalies = Array::new()
+
+  let html_str = export_html_report(stats, anomalies)
+  assert_true(html_str.length() > 0)
+}

@@ -38,3 +38,24 @@ test "anomaly detection checksum check" {
   inspect(anomalies.length(), content="1")
   inspect(anomalies[0].kind, content="ChecksumMismatch")
 }
+
+///|
+test "session profiler tracking" {
+  let profiler = SessionProfiler::new()
+  let key = @reassembly.SessionKey::new("192.168.1.10", 5000U, "1.1.1.1", 80U)
+  profiler.record_packet(key, 200, 100.0)
+  profiler.record_packet(key, 300, 102.5)
+
+  let active = profiler.get_active_sessions()
+  inspect(active.length(), content="1")
+  inspect(active[0].packet_count, content="2")
+  inspect(active[0].total_bytes, content="500")
+}
+
+///|
+test "complex packet filter evaluation" {
+  let filter = ComplexPacketFilter::new()
+  filter.add_rule("protocol", OpEquals, "TCP")
+  assert_true(filter.matches_protocol("TCP", 100))
+  assert_false(filter.matches_protocol("UDP", 100))
+}
