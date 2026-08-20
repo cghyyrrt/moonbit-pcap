@@ -16,3 +16,5 @@
 - README 已重写；CI 已加入稳定工具链、全目标检查、Unix native 测试、Windows 默认测试和手动 Mooncakes 发布工作流。
 - 全量验证：`moon fmt --check`、`moon check --deny-warn --target all`、`moon test --deny-warn`、`moon test --target wasm-gc`、benchmark 均通过。
 - `moon test --target all` 在当前 Windows 本机被 MoonBit runtime 的 `rand_s` 隐式声明警告阻断；项目默认目标和 WASM-GC 测试通过，CI 已按平台避免该环境问题。
+- GitHub `origin/main` 已推送到提交 `355fd2d`。
+- Mooncakes `moon publish` 实际发布完成，服务器返回 `200 OK`，包版本为 `0.1.0`。
