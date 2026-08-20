@@ -6,11 +6,31 @@ import {
 }
 
 // Values
+pub fn adler32(Bytes) -> UInt
+
+pub fn base64_char(Int) -> Char
+
+pub fn base64_encode(Bytes) -> String
+
 pub fn byte_to_hex(Byte) -> String
 
 pub fn bytes_to_hex(Bytes, separator? : String) -> String
 
+pub fn crc16_ccitt(Bytes) -> UInt
+
+pub fn crc16_modbus(Bytes) -> UInt
+
 pub fn crc32(Bytes) -> UInt
+
+pub fn crc8(Bytes) -> Byte
+
+pub fn decode_varint_u64(BinaryReader) -> UInt64
+
+pub fn decode_zigzag_i64(UInt64) -> Int64
+
+pub fn encode_varint_u64(UInt64) -> Bytes
+
+pub fn encode_zigzag_i64(Int64) -> UInt64
 
 pub fn hex_dump(Bytes, max_len? : Int) -> String
 
@@ -70,6 +90,74 @@ pub fn BinaryWriter::write_u32(Self, UInt) -> Unit
 pub fn BinaryWriter::write_u64(Self, UInt64) -> Unit
 pub fn BinaryWriter::write_u8(Self, Byte) -> Unit
 
+pub struct BitReader {
+  bytes : Bytes
+  mut byte_offset : Int
+  mut bit_offset : Int
+}
+pub fn BitReader::align_to_byte(Self) -> Unit
+pub fn BitReader::new(Bytes) -> Self
+pub fn BitReader::read_bit(Self) -> Bool
+pub fn BitReader::read_bits(Self, Int) -> UInt
+pub fn BitReader::read_se(Self) -> Int
+pub fn BitReader::read_ue(Self) -> UInt
+pub fn BitReader::remaining_bits(Self) -> Int
+
+pub struct ByteCursor {
+  bytes : Bytes
+  mut position : Int
+}
+pub fn ByteCursor::at_end(Self) -> Bool
+pub fn ByteCursor::contains(Self, Bytes) -> Bool
+pub fn ByteCursor::mark(Self) -> CursorMark
+pub fn ByteCursor::new(Bytes) -> Self
+pub fn ByteCursor::peek_u8(Self) -> Byte?
+pub fn ByteCursor::position(Self) -> Int
+pub fn ByteCursor::read_i16_be(Self) -> Int?
+pub fn ByteCursor::read_i16_le(Self) -> Int?
+pub fn ByteCursor::read_u16_be(Self) -> UInt?
+pub fn ByteCursor::read_u16_le(Self) -> UInt?
+pub fn ByteCursor::read_u16_length_prefixed_be(Self) -> Bytes?
+pub fn ByteCursor::read_u16_length_prefixed_le(Self) -> Bytes?
+pub fn ByteCursor::read_u24_be(Self) -> UInt?
+pub fn ByteCursor::read_u24_le(Self) -> UInt?
+pub fn ByteCursor::read_u32_be(Self) -> UInt?
+pub fn ByteCursor::read_u32_le(Self) -> UInt?
+pub fn ByteCursor::read_u64_be(Self) -> UInt64?
+pub fn ByteCursor::read_u64_le(Self) -> UInt64?
+pub fn ByteCursor::read_u8(Self) -> Byte?
+pub fn ByteCursor::read_u8_length_prefixed(Self) -> Bytes?
+pub fn ByteCursor::read_varuint(Self) -> UInt64?
+pub fn ByteCursor::remaining(Self) -> Int
+pub fn ByteCursor::reset(Self, CursorMark) -> Unit
+pub fn ByteCursor::skip(Self, Int) -> Bool
+pub fn ByteCursor::take(Self, Int) -> Bytes?
+
+pub struct ByteQueue {
+  data : Array[Byte]
+  mut head : Int
+}
+pub fn ByteQueue::clear(Self) -> Unit
+pub fn ByteQueue::compact_if_needed(Self) -> Unit
+pub fn ByteQueue::consume_prefix(Self, Bytes) -> Bool
+pub fn ByteQueue::find(Self, Bytes) -> Int?
+pub fn ByteQueue::get(Self, Int) -> Byte?
+pub fn ByteQueue::is_empty(Self) -> Bool
+pub fn ByteQueue::length(Self) -> Int
+pub fn ByteQueue::new() -> Self
+pub fn ByteQueue::peek(Self) -> Byte?
+pub fn ByteQueue::push(Self, Byte) -> Unit
+pub fn ByteQueue::push_bytes(Self, Bytes) -> Unit
+pub fn ByteQueue::snapshot(Self) -> Bytes
+pub fn ByteQueue::starts_with(Self, Bytes) -> Bool
+pub fn ByteQueue::take(Self, Int) -> Bytes?
+pub fn ByteQueue::take_all(Self) -> Bytes
+pub fn ByteQueue::take_through(Self, Bytes) -> Bytes?
+
+pub(all) struct CursorMark {
+  position : Int
+} derive(Eq, @debug.Debug)
+
 pub(all) enum Endian {
   LittleEndian
   BigEndian
@@ -78,4 +166,3 @@ pub(all) enum Endian {
 // Type aliases
 
 // Traits
-

@@ -23,12 +23,19 @@ pub fn PacketFilter::new() -> PacketFilter {
 
 ///|
 pub fn PacketFilter::set_min_length(self : PacketFilter, min_len : Int) -> Unit {
-  self.min_length = min_len
+  self.min_length = if min_len < 0 { 0 } else { min_len }
+  if self.max_length < self.min_length {
+    self.max_length = self.min_length
+  }
 }
 
 ///|
 pub fn PacketFilter::set_max_length(self : PacketFilter, max_len : Int) -> Unit {
-  self.max_length = max_len
+  self.max_length = if max_len < self.min_length {
+    self.min_length
+  } else {
+    max_len
+  }
 }
 
 ///|

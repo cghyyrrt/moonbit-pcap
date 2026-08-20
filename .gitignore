@@ -3,4 +3,6 @@ _build/
 *.exe
 *.wasm
 .moon/
+.worktrees/
+*.generated.mbti
 .DS_Store

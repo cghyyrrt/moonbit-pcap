@@ -1,0 +1,4 @@
+import {
+  "cghyyrrt/moonbit-pcap/src/layers",
+  "moonbitlang/core/bench",
+} for "test"

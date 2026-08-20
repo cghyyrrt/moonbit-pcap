@@ -1,0 +1,44 @@
+name: Publish to Mooncakes
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Verify toolchain and package
+        run: |
+          moon version --all
+          moon update
+          moon fmt --check
+          moon check --deny-warn --target all
+          moon test --deny-warn
+          moon info
+
+      - name: Publish
+        env:
+          MOONCAKES_TOKEN: ${{ secrets.MOONCAKES_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${MOONCAKES_TOKEN:-}" ]; then
+            echo "MOONCAKES_TOKEN is not configured" >&2
+            exit 1
+          fi
+          credentials="$HOME/.moon/credentials.json"
+          trap 'rm -f "$credentials"' EXIT
+          printf '%s' "$MOONCAKES_TOKEN" > "$credentials"
+          moon publish
