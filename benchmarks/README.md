@@ -13,7 +13,7 @@ moon bench benchmarks
 Verified locally on 2026-08-21 with MoonBit `0.1.20260814` on Windows:
 
 ```text
-ethernet_ipv4_udp_parse  472.67 ns ± 28.90 ns   435.88 ns … 532.31 ns  in 10 × 100000 runs
+ethernet_ipv4_udp_parse  479.38 ns ± 25.85 ns   450.11 ns … 530.47 ns  in 10 × 100000 runs
 ```
 
 Results are machine-dependent and should not be compared across runners
