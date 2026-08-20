@@ -5,7 +5,7 @@
 fn main {
   println("==========================================================")
   println("  moonbit-pcap v0.1.0 - Network Packet Capture & Analyzer ")
-  println("  Developed for Open Source Contest 2026 (OSC 2026)        ")
+  println("  MoonBit network packet analysis toolkit                  ")
   println("==========================================================")
   println("Usage: moon run cmd/main -- <pcap_file> [--json|--csv]")
 
